@@ -20,7 +20,7 @@ export const HomePage = () => {
     return (
         <Container maxWidth="lg">
             <RegisterBookForm />
-            <Button variant="contained" style={{ marginTop: 5, marginBottom: 5 }} onClick={handleOpenDialog}>Agregar Tarea</Button>
+            <Button variant="contained" style={{ marginTop: 5, marginBottom: 5 }} onClick={handleOpenDialog}>Agregar Libro</Button>
             <CustomTable columns={BOOK_TABLE_COLUMNS} rows={books} actions={actions} />
             <ToastContainer />
         </Container>
