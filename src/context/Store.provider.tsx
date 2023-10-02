@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useBook } from "../hooks/useBookOld";
+import { useBook } from "../hooks/useBook";
 import { storeContext } from "./Store.context";
 
 export const StoreProvider = ({
@@ -8,7 +8,7 @@ export const StoreProvider = ({
   children: JSX.Element | JSX.Element[];
 }) => {
   const { addBook, books, deleteBook } = useBook();
-  const [dialogVisible, setDialogVisible] = useState(true);
+  const [dialogVisible, setDialogVisible] = useState(false);
 
   const handleCloseDialog = () => setDialogVisible(false);
 
