@@ -19,14 +19,14 @@ export const useBook = () => {
   }, []);
 
   useEffect(() => {
-      if(books.length > 0){
-        const inMemory = InMemoryService.getInstance();
-        inMemory.saveData("books", books);
-      }
+    const inMemory = InMemoryService.getInstance();
+    if (books.length > 0) {
+      inMemory.saveData("books", books);
+    }
   }, [books, setBooks]);
 
   const addBook = async (data: Omit<BookModel, "id">) => {
-    const bookSaved = new HttpPetitionMock<HttpResponseModel>().run(
+    const bookSaved = new HttpPetitionMock<HttpResponseModel<unknown>>().run(
       MS_HTTP_MOCK,
       () => {
         setBooks((books) => [
@@ -48,7 +48,7 @@ export const useBook = () => {
   };
 
   const deleteBook = async (bookId: string) => {
-    const bookDeleted = new HttpPetitionMock<HttpResponseModel>().run(
+    const bookDeleted = new HttpPetitionMock<HttpResponseModel<unknown>>().run(
       MS_HTTP_MOCK,
       () => {
         setBooks((books) => [...books.filter((x) => x.id !== bookId)]);

@@ -2,12 +2,16 @@ import "./App.css";
 import "react-toastify/dist/ReactToastify.css";
 import NavBar from "./components/NavBar";
 import { HomePage } from "./Page/HomePage";
+import { LoginPage } from "./Page/LoginPage";
+import { useAuthContext } from "./context/Auth.context";
 
 function App() {
+  const { user } = useAuthContext();
   return (
     <>
       <NavBar />
-      <HomePage />
+      { user && <HomePage />}
+      {!user && <LoginPage />}
     </>
   );
 }

@@ -1,22 +1,23 @@
 import { Dialog, DialogProps } from "@mui/material";
-import { useStoreContext } from "../context/Store.context";
 
 export const CustomDialog = ({
   children,
+  handleCloseDialog,
+  isVisible,
 }: {
   children: JSX.Element | JSX.Element[];
+  handleCloseDialog: () => void;
+  isVisible: boolean;
 }) => {
-  const { dialogVisible, handleCloseDialog } =
-    useStoreContext();
-
   const handleCloseCustomDialog: DialogProps["onClose"] = (_, reason) => {
-    if (reason && (reason === "backdropClick" || reason === "escapeKeyDown")) return;
+    if (reason && (reason === "backdropClick" || reason === "escapeKeyDown"))
+      return;
     handleCloseDialog();
-  }
+  };
 
   return (
     <Dialog
-      open={dialogVisible}
+      open={isVisible}
       onClose={handleCloseCustomDialog}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"

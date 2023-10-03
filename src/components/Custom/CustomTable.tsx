@@ -32,7 +32,7 @@ export const CustomTable = ({ columns, rows, actions = [] }: Props) => {
                     {rows.length > 0 && rows.map((row) => {
                         return (
                             <TableRow
-                                key={row.id}
+                                key={uuidV4()}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 {
@@ -47,8 +47,8 @@ export const CustomTable = ({ columns, rows, actions = [] }: Props) => {
                                 {
                                     actions.map(({ icon: Icon, method }) => {
                                         return (
-                                            <TableCell align="right">
-                                                <Icon key={uuidV4()} onClick={() => method(row.id)} />
+                                            <TableCell align="right" key={uuidV4()}>
+                                                <Icon onClick={() => method(row.id)} />
                                             </TableCell>
                                         )
                                     })

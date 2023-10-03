@@ -1,45 +1,57 @@
 import {
-  Box,
-  Container,
-  TextField,
-  Button,
-  Grid,
-  CssBaseline,
   Avatar,
+  Box,
+  Button,
+  Container,
+  CssBaseline,
+  DialogContent,
+  Grid,
+  TextField,
   Typography,
-  FormControlLabel,
-  Checkbox,
-  Link,
 } from "@mui/material";
+import { CustomDialog } from "./Custom/CustomDialog";
 import { useForm } from "../hooks/useForm";
 import { UserModel } from "../types/UserModel";
+import { useEffect, useState, FormEvent } from 'react';
+import { useInteractiveContext } from "../context/Interactive.context";
 import { useAuthContext } from "../context/Auth.context";
-import { LoginDialogForm } from "../components/SignInDialogForm";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { FormEvent, useEffect, useState } from "react";
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-export const LoginPage = () => {
-  const [blockButton, setBlockButton] = useState(false);
-  const { signUp, user } = useAuthContext();
-  const { form, handleOnChange, clearForm } = useForm<Omit<UserModel, "id">>({
+export const LoginDialogForm = () => {
+  const [blockButtons, setBlockButtons] = useState(false);
+
+  const { signIn, user } = useAuthContext();
+  const { isVisibleSignInDialog, handleCloseSignInDialog } =
+    useInteractiveContext();
+
+  const { form, handleOnChange, clearForm } = useForm<
+    Omit<UserModel, "fullname" | "id">
+  >({
     email: "",
     password: "",
-    fullname: "",
   });
 
   useEffect(() => {
-    if (user) clearForm();
+    if (user) handleCloseSignInDialog();
   }, [user]);
 
-  const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSignIn = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setBlockButton(true);
-    await signUp(form);
-    setBlockButton(false);
+    setBlockButtons(true);
+    await signIn(form);
+    setBlockButtons(false);
   };
+  const handleCancelSignIn = () => {
+    clearForm();
+    handleCloseSignInDialog();
+  }
 
   return (
-    <>
+    <CustomDialog
+      isVisible={isVisibleSignInDialog}
+      handleCloseDialog={handleCloseSignInDialog}
+    >
+      <DialogContent>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -54,27 +66,15 @@ export const LoginPage = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Registro
+            Iniciar Sesion
           </Typography>
           <Box
             component="form"
             noValidate
-            onSubmit={handleSignUp}
+            onSubmit={handleSignIn}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Nombre completo"
-                  name="fullname"
-                  autoComplete="family-name"
-                  value={form.fullname}
-                  onChange={handleOnChange}
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -105,15 +105,26 @@ export const LoginPage = () => {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              disabled={blockButton}
+              sx={{ mt: 3, mb: 1 }}
+              disabled={blockButtons}
             >
-              Crear cuenta
+              Iniciar Sesion
+            </Button>
+            <Button
+              type="button"
+              fullWidth
+              color="error"
+              variant="contained"
+              sx={{ mt: 0.1, mb: 2 }}
+              onClick={handleCancelSignIn}
+              disabled={blockButtons}
+            >
+             Cancelar
             </Button>
           </Box>
         </Box>
       </Container>
-      <LoginDialogForm />
-    </>
+      </DialogContent>
+    </CustomDialog>
   );
 };

@@ -24,6 +24,10 @@ export class InMemoryService {
       return this.tryParseToObject(json);
     }
   }
+  
+  deleteData(collectionName: string): void {
+    localStorage.removeItem(collectionName);
+  }
 
   private tryParseToObject<T>(json: string | null): T | null {
     try {
